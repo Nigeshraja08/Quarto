@@ -1,8 +1,7 @@
 ---
 project:
   type: website
-  output-dir: docs
-title: 'Quarto' 
+  output-dir: docs   lfs track "F:\Quarto"
 format: html
 jupyter: python3
 
