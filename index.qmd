@@ -7,7 +7,9 @@ jupyter: python3
 
 ---
 ```{=html}
-<h1 style="text-align:center">Probability Theorem and Random variable</h1> 
+<h1 style="text-align:center">Machine Learning (CS 5805)</h1>
+<h2 style="text-align:center">Submitted by: Swethaa Shanmugam Ramesh</h2>
+<h1>1. Probability theory and random variables</h1> 
 ```
 
 ```{python}
@@ -65,16 +67,15 @@ from scipy.stats import norm
 
 variable_of_interest = 'Weekly_Sales'
 
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(8, 6))
 sns.histplot(df[variable_of_interest], kde=True, bins=30, color='blue', stat='density')
 
 mu, std = df[variable_of_interest].mean(), df[variable_of_interest].std()
 xmin, xmax = plt.xlim()
-x = np.linspace(xmin, xmax, 100)
-p = norm.pdf(x, mu, std)
+x = np.linspace(xmin, xmax, 100).round(2)
+p = norm.pdf(x, mu, std).round(2)
 plt.plot(x, p, 'k', linewidth=2)
-print(variable_of_interest)
-print(x,p)
+print(variable_of_interest,x,p)
 plt.xlabel(variable_of_interest)
 plt.ylabel('Probability Density')
 plt.title(f'Probability Density Function for {variable_of_interest}')
@@ -88,7 +89,7 @@ df.drop('Date', axis=1, inplace=True)
 num_columns = len(df.columns)
 num_rows = (num_columns // 2) + (num_columns % 2)  
 num_cols = 2
-fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 3 * num_rows))
+fig, axes = plt.subplots(num_rows, num_cols, figsize=(8, 3 * num_rows))
 if num_rows == 1:
     axes = axes.reshape(1, -1)
 for i, column in enumerate(df.columns):
@@ -118,7 +119,7 @@ from scipy.stats import rv_histogram
 column_of_interest = 'Weekly_Sales'
 hist, bin_edges = np.histogram(df[column_of_interest], bins=30, density=True)
 pmf = rv_histogram((hist, bin_edges))
-x_values = np.linspace(df[column_of_interest].min(), df[column_of_interest].max(), 100)
+x_values = np.linspace(df[column_of_interest].min(), df[column_of_interest].max(), 100).round(2)
 pmf_values = pmf.pdf(x_values)
 print("X values\n",x_values)
 print("pmf values \n",pmf_values)
@@ -152,7 +153,7 @@ plt.show()
 ```{python}
 import statsmodels.api as sm
 columns = df.columns
-fig, axes = plt.subplots(nrows=len(columns), ncols=1, figsize=(12, 8 * len(columns)))
+fig, axes = plt.subplots(nrows=len(columns), ncols=1, figsize=(8, 4 * len(columns)))
 for i, column in enumerate(columns):
     ecdf = sm.distributions.ECDF(df[column])
     x = sorted(df[column].unique())
@@ -232,7 +233,7 @@ plt.show()
 ```
 
 ```{=html}
-<h1 style="text-align:center">Cluster</h1> 
+<h3>2.Clustering</h3> 
 ```
 
 ```{python}
@@ -306,17 +307,8 @@ plt.ylabel('IMDb Rating')
 plt.legend(title='TV Show Type')
 plt.show()
 ```
-```{python}
-plt.figure(figsize=(30, 10))
-sns.lineplot(x='Year', y='Episodes', data=df, estimator='sum', ci=None, marker='o', color='blue')
-plt.xticks(rotation = 90,
-           fontsize = 10)
-plt.xlim(0, 178)
-plt.title('TV Show Production Trends Over the Years')
-plt.xlabel('Release Year')
-plt.ylabel('Total Number of Episodes')
-plt.show()
-```
+
+
 ```{python}
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -389,7 +381,7 @@ import matplotlib.cm as cm
 range_n_clusters = [2, 3, 4, 5, 6]
 for n_clusters in range_n_clusters:
     fig, (ax1, ax2) = plt.subplots(1, 2)
-    fig.set_size_inches(18, 7)
+    
     ax1.set_xlim([-0.1, 1])
     ax1.set_ylim([0, len(X) + (n_clusters + 1) * 10])
     clusterer = KMeans(n_clusters=n_clusters, random_state=10)
@@ -412,7 +404,7 @@ for n_clusters in range_n_clusters:
 
         ax1.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
         y_lower = y_upper + 10  
-    ax1.set_title("The silhouette plot for the various clusters.")
+    ax1.set_title("The silhouette plot ")
     ax1.set_xlabel("The silhouette coefficient values")
     ax1.set_ylabel("Cluster label")
     ax1.axvline(x=silhouette_avg, color="red", linestyle="--")
@@ -442,8 +434,8 @@ plt.show()
 ```
 
 ```{=html}
-<h1 style="text-align:center">Linear Regression
-</h1> 
+<h3>3. a)Linear Regression
+</h3> 
 ```
 ```{python}
 df = pd.read_csv('CarPrice_Assignment.csv')
@@ -512,7 +504,7 @@ X.head()
 y
 ```
 ```{python}
-plt.figure(figsize=(12, 10))
+plt.figure(figsize=(8, 6))
 sns.heatmap(df.corr(), cmap='coolwarm', fmt=".2f", linewidths=.5)
 for i in range(len(df.corr())):
     for j in range(len(df.corr())):
@@ -521,12 +513,7 @@ for i in range(len(df.corr())):
 plt.title('Correlation Heatmap')
 plt.show()
 ```
-```{python}
-plt.figure(figsize=(12, 6))
-sns.boxplot(data=df, orient='h')
-plt.title('Box Plot')
-plt.show()
-```
+
 ```{python}
 sns.pairplot(df)
 ```
@@ -591,22 +578,6 @@ sns.histplot(df['price'], kde=True, color='skyblue')
 plt.title('Distribution of Car Prices with KDE')
 plt.show()
 ```
-```{python}
-df = pd.read_csv('CarPrice_Assignment.csv')
-plt.figure(figsize=(8, 6))
-sns.boxplot(x='enginetype', y='price', data=df)
-plt.title('Engine Type vs. Price')
-plt.xticks(rotation=45)
-plt.show()
-```
-
-```{python}
-plt.figure(figsize=(8, 6))
-sns.boxplot(x='fuelsystem', y='price', data=df)
-plt.title('Fuel System vs. Price')
-plt.xticks(rotation=45)
-plt.show()
-```
 
 ```{python}
 sns.histplot(df['citympg'], kde=True, bins=20, color='skyblue')
@@ -615,12 +586,7 @@ plt.xlabel('City MPG')
 plt.show()
 ```
 
-```{python}
-sns.countplot(x='cylindernumber', data=df)
-plt.title('Count of Cylinder Number')
-plt.xlabel('Cylinder Number')
-plt.show()
-```
+
 
 ```{python}
 from sklearn.model_selection import train_test_split
@@ -815,7 +781,7 @@ plt.show()
 ```
 
 ```{=html}
-<h1 style="text-align:center">Non-Linear Regression</h1>
+<h3 >3.b)Non-Linear Regression</h3>
 ```
 ```{python}
 from sklearn.ensemble import GradientBoostingRegressor
@@ -874,7 +840,7 @@ df.drop(low_corr_features, axis=1,inplace=True)
 df.corr()
 ```
 ```{python}
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(8, 6))
 sns.histplot(df['CNTR_DIST'], bins=30, kde=True)
 plt.title('Distribution of CNTR_DIST')
 plt.show()
@@ -930,10 +896,7 @@ X = df[features]
 y = df[target]
 ```
 
-```{python}
-sns.pairplot(df[features + [target]])
-plt.show()
-```
+
 
 ```{python}
 correlation_matrix = df[features + [target]].corr()
@@ -1015,7 +978,7 @@ from sklearn.linear_model import LinearRegression
 
 y = df['SALE_PRC']
 num_features = X.shape[1]
-fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(10, 4*num_features))
+fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(10, 3*num_features))
 fig.tight_layout(h_pad=4)
 for i, feature in enumerate(X.columns):
     X_single_feature = X[feature].values.reshape(-1, 1)
@@ -1042,11 +1005,11 @@ print(f"Polynomial Regression Model Accuracy: {accuracy}")
 ```
 
 ```{python}
-X_poly
+X_poly.round(2)
 ```
 
 ```{python}
-print(poly_reg_model.coef_)
+print(poly_reg_model.coef_.round(2))
 ```
 
 ```{python}
@@ -1057,7 +1020,7 @@ print(poly_reg_model.intercept_)
 
 ```{python}
 degree = 2
-fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(10, 4*num_features))
+fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(10, 3*num_features))
 fig.tight_layout(h_pad=4)
 for i, feature in enumerate(X.columns):
     X_single_feature = X[feature].values.reshape(-1, 1)
@@ -1090,7 +1053,7 @@ print(f"Polynomial Regression Model Accuracy: {accuracy}")
 ```{python}
 num_features = X.shape[1]
 degree = 3
-fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(10, 4*num_features))
+fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(10, 3*num_features))
 fig.tight_layout(h_pad=4)
 for i, feature in enumerate(X.columns):
     X_single_feature = X[feature].values.reshape(-1, 1)
@@ -1161,7 +1124,10 @@ ypred_lgb = clf_lgb.predict(X_test)
 ypred_lgb = (ypred_lgb >= 0.5).astype(int)
 
 cm_lgb = confusion_matrix(y_test, ypred_lgb)
-sns.heatmap(cm_lgb, annot=True)
+sns.heatmap(cm_lgb,cmap="Blues")
+for i in range(len(cm_lgb)):
+    for j in range(len(cm_lgb)):
+        plt.text(j + 0.5, i + 0.5, f"{correlation_matrix.iloc[i, j]:.2f}", ha='center', va='center', fontsize=10)
 dtrain_xgb = xgb.DMatrix(X_train, label=y_train)
 
 parameters_xgb = {
@@ -1197,7 +1163,7 @@ print("AUC score with XGBoost is: ", roc_auc_score(y_test,ypred_xgb))
 
 
 ```{=html}
-<h1 style="text-align:center">Classification</h1>
+<h3>4.Classification</h3>
 ```
 
 ```{python}
@@ -1649,7 +1615,7 @@ print(classification_report_knn)
 ```
 
 ```{=html}
-<h1 style="text-align:center">Outlier Detection</h1>
+<h1 >5.Outlier Detection</h1>
 ```
 ```{python}
 import numpy as np
@@ -1755,7 +1721,7 @@ df_out = df.drop(Outliers_IQR, axis=0).reset_index(drop=True)
 
 ```{python}
 features = ['age', 'bmi', 'children', 'charges']
-plt.figure(figsize=(20,10))
+plt.figure(figsize=(16,10))
 for i, feature in enumerate(features, 1):
     plt.subplot(2, len(features), i)
     sns.histplot(df[feature], bins=30, kde=True)
@@ -1817,7 +1783,7 @@ plt.show()
 
 ```{python}
 
-plt.figure(figsize=(20, 8))
+plt.figure(figsize=(16, 8))
 
 for i, feature in enumerate(features, 1):
     plt.subplot(2, len(features), i)
@@ -1908,7 +1874,7 @@ df_out4 = df.drop(Outliers_z_score, axis = 0).reset_index(drop=True)
 ```
 
 ```{python}
-plt.figure(figsize=(20, 12))
+plt.figure(figsize=(16, 12))
 for i, feature in enumerate(features, 1):
     plt.subplot(3, len(features), i)
     sns.histplot(df[feature], bins=30, kde=True)
@@ -1931,7 +1897,7 @@ features = ['age', 'bmi', 'children', 'charges']
 clf = IsolationForest(contamination=0.05, random_state=42)  
 outliers = clf.fit_predict(df[features])
 outlier_mask = outliers == -1
-plt.figure(figsize=(20, 10))
+plt.figure(figsize=(20, 8))
 for i, feature in enumerate(features, 1):
     plt.subplot(2, len(features), i)
     sns.histplot(df[feature], bins=30, kde=True)
@@ -1963,6 +1929,7 @@ for i, feature1 in enumerate(features, 1):
         sns.scatterplot(x=df[feature1], y=df[feature2], hue=label, palette='viridis', alpha=0.7)
         plt.title(f'{feature1} vs {feature2}')
 plt.tight_layout()
+plt.legend( fontsize="8")
 plt.show()
 
 ```
